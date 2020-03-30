@@ -2,7 +2,7 @@
 
 Aplicativo para classificar imagens (gatos e cachorros) criado na disciplina de Programação Mobile, por Kleber de Oliveira Andrade.
 
-Tutorial de criação deste app [clique aqui]().
+Tutorial de criação deste app [clique aqui](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-classificar-imagens-gato-e-cachorro-com-teachable-machine-be35c604c780).
 
 <p align="center">
     <img src="https://cdn-images-1.medium.com/max/1200/1*tYVH6LoV6R68_UNNMdNnpg.jpeg" width="250"/>
