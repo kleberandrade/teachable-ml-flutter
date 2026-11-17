@@ -25,7 +25,9 @@ jobs:
       - run: flutter test --coverage
       - run: flutter test integration_test/inference_test.dart -d macos
       - run: flutter build macos --release
+      - name: Archive app with executable permissions
+        run: ditto -c -k --sequesterRsrc --keepParent "build/macos/Build/Products/Release/Teachable Lab.app" teachable-lab-macos.zip
       - uses: actions/upload-artifact@v4
         with:
           name: macos-app
-          path: build/macos/Build/Products/Release/*.app
+          path: teachable-lab-macos.zip

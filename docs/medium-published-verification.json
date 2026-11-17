@@ -1,0 +1,56 @@
+{
+  "exercises": 5,
+  "featured": "https://miro.medium.com/v2/resize:fit:1200/0*2THI6JZl_TxVEXfA.png",
+  "headings": [
+    "Notas de aula do prof. Kleber de Oliveira Andrade — edição revisada em novembro de 2026",
+    "O que o modelo realmente responde",
+    "Preparando seu próprio experimento no Teachable Machine",
+    "Ambiente e execução reproduzível",
+    "Dependências alinhadas ao projeto",
+    "Uma arquitetura pequena com responsabilidades claras",
+    "Validando o contrato antes de inferir",
+    "Da fotografia aos pixels que o modelo espera",
+    "Executando o modelo sem travar a tela",
+    "Interpretando resultados e recuperando falhas",
+    "Usando e entendendo a interface",
+    "Testes, build e limites verificados",
+    "Referências, autoria e créditos",
+    "Cinco exercícios práticos"
+  ],
+  "images": [
+    {
+      "alt": "Ilustração conceitual de um gato e um cachorro, com o título Gato ou cachorro? Flutter + Teachable Machine.",
+      "caption": "Capa conceitual criada com IA para esta aula. Não é captura do aplicativo nem imagem de treinamento.",
+      "loaded": true,
+      "width": 699
+    },
+    {
+      "alt": "Aplicativo Flutter real no macOS com área de imagem vazia, escolha de arquivo, exemplos e painel de resultado.",
+      "caption": "Captura real do build de produção no macOS, em 17/11/2026. A tela começa sem imagem nem resultado e oferece exemplos licenciados.",
+      "loaded": true,
+      "width": 699
+    },
+    {
+      "alt": "Aplicativo real mostrando gato na neve e scores Gato 100,0% e Cachorro 0,0%, arredondados.",
+      "caption": "Inferência real no build macOS. Foto do gato: Von.grzanka, CC BY-SA 3.0. Scores arredondados não são acurácia medida. Captura com a foto sob CC BY-SA 3.0.",
+      "loaded": true,
+      "width": 699
+    },
+    {
+      "alt": "Aplicativo real mostrando labrador amarelo e scores Cachorro 100,0% e Gato 0,0%, arredondados.",
+      "caption": "Inferência real no build macOS. Foto: Elf; derivação Djmirko e retoques FT2, CC BY-SA 3.0. Captura com a foto sob CC BY-SA 3.0. Não é resultado simulado.",
+      "loaded": true,
+      "width": 699
+    }
+  ],
+  "url": "https://medium.com/flutter-comunidade-br/criando-um-aplicativo-em-flutter-para-classificar-imagens-gato-e-cachorro-com-teachable-machine-be35c604c780?postPublishedType=repub",
+  "codeBlocksMatch": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ]
+}
