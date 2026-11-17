@@ -1,30 +1,44 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:teachable_ml/main.dart';
+import 'package:teachable_ml/controller.dart';
+import 'package:teachable_ml/domain/classification.dart';
+
+class Engine implements Classifier {
+  @override
+  Future<void> load() async {}
+  @override
+  Future<List<Prediction>> classify(Uint8List bytes) async => [
+    const Prediction('Gato', .8),
+    const Prediction('Cachorro', .2),
+  ];
+  @override
+  void close() {}
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('responsive empty state, cancellation and reset are accessible', (
+    tester,
+  ) async {
+    final state = ClassificationController(Engine());
+    await state.initialize();
+    await tester.binding.setSurfaceSize(const Size(360, 740));
+    await tester.pumpWidget(
+      MyApp(controller: state, pickImage: () async => null),
+    );
+    expect(find.text('Gato ou cachorro?'), findsOneWidget);
+    await tester.ensureVisible(find.text('Escolher imagem'));
+    await tester.tap(find.text('Escolher imagem'));
+    await tester.pumpAndSettle();
+    expect(find.text('Sua imagem aparece aqui'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.binding.setSurfaceSize(const Size(1200, 800));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+    state.dispose();
+    await tester.binding.setSurfaceSize(null);
   });
 }

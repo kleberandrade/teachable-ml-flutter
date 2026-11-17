@@ -23,3 +23,5 @@ flutter:
   assets:
     - assets/model_unquant.tflite
     - assets/labels.txt
+    - assets/samples/cat.jpg
+    - assets/samples/dog.jpg

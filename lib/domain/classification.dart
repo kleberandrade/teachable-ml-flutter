@@ -55,7 +55,9 @@ Float32List preprocess(Uint8List bytes) {
   if (decoded == null) {
     throw const FormatException('Não foi possível abrir a imagem.');
   }
-  final oriented = img.bakeOrientation(decoded);
+  final oriented = img
+      .bakeOrientation(decoded)
+      .convert(format: img.Format.uint8, numChannels: 3);
   final square = img.copyResizeCropSquare(
     oriented,
     size: inputSize,
