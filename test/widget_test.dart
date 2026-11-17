@@ -29,6 +29,7 @@ void main() {
       MyApp(controller: state, pickImage: () async => null),
     );
     expect(find.text('Gato ou cachorro?'), findsOneWidget);
+    expect(find.text('Créditos e licenças'), findsOneWidget);
     await tester.ensureVisible(find.text('Escolher imagem'));
     await tester.tap(find.text('Escolher imagem'));
     await tester.pumpAndSettle();
@@ -37,6 +38,14 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(1200, 800));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
+    await tester.ensureVisible(find.text('Créditos e licenças'));
+    await tester.tap(find.text('Créditos e licenças'));
+    await tester.pumpAndSettle();
+    expect(find.text('Teachable Lab'), findsOneWidget);
+    expect(
+      find.text('Copyright 2020 Kleber de Oliveira Andrade'),
+      findsOneWidget,
+    );
     await tester.pumpWidget(const SizedBox());
     state.dispose();
     await tester.binding.setSurfaceSize(null);

@@ -25,3 +25,5 @@ flutter:
     - assets/labels.txt
     - assets/samples/cat.jpg
     - assets/samples/dog.jpg
+    - assets/samples/README.md
+    - LICENSE

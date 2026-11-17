@@ -9,7 +9,18 @@ import 'classifier.dart';
 import 'controller.dart';
 import 'domain/classification.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  LicenseRegistry.addLicense(() async* {
+    yield LicenseEntryWithLineBreaks([
+      'Teachable Lab',
+    ], await rootBundle.loadString('LICENSE'));
+    yield LicenseEntryWithLineBreaks([
+      'Example photographs',
+    ], await rootBundle.loadString('assets/samples/README.md'));
+  });
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key, this.controller, this.pickImage});
@@ -166,6 +177,18 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 8),
                   const Text(
                     'Use uma foto nítida, com um animal no centro. O modelo só conhece duas classes: até uma foto de uma cadeira receberá um resultado. O score não mede acurácia.',
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton.icon(
+                    onPressed: () => showLicensePage(
+                      context: context,
+                      applicationName: 'Teachable Lab',
+                      applicationVersion: '2.0.0',
+                      applicationLegalese:
+                          'Copyright 2020 Kleber de Oliveira Andrade',
+                    ),
+                    icon: const Icon(Icons.info_outline),
+                    label: const Text('Créditos e licenças'),
                   ),
                   const SizedBox(height: 24),
                 ],

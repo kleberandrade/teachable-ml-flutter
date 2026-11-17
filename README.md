@@ -23,7 +23,7 @@ flutter pub get --enforce-lockfile
 flutter run -d macos
 ```
 
-Choose **Escolher imagem** for a file, **Testar gato** or **Testar cachorro** for bundled samples, and **Recomeçar** to clear the current result. Cancelling the file picker keeps the previous result. Cancelling an analysis invalidates its result; the already-running isolated job may finish in the background. The interface stays responsive.
+Choose **Escolher imagem** for a file, **Testar gato** or **Testar cachorro** for bundled samples, and **Recomeçar** to clear the current result. Cancelling the file picker keeps the previous result. Cancelling an analysis invalidates its result; the already-running isolated job may finish in the background. The interface stays responsive. Open **Créditos e licenças** for the original MIT notice, sample-photo attribution and dependency licenses included in the app bundle.
 
 Images are limited to 12 MB and 24 megapixels. JPEG, PNG and WebP are recommended. EXIF orientation is applied before a centered square crop and resizing to 224×224. A preview shows the original aspect ratio; the model sees the square crop. Files are not uploaded or retained by this app.
 
@@ -50,7 +50,7 @@ flutter build macos --release
 
 The macOS build embeds and signs the native library from the locked tflite_flutter package through an Xcode build phase. The local build is not notarized or App Store signed. CI runs the same checks and uploads the app as an artifact; the badge links to its actual status.
 
-Verified locally: unit/controller/widget tests, native model load, real cat/dog inference, invalid-image rejection, debug/release macOS builds, and release-app UI interactions including file selection, cancellation and reset. Responsive widget layouts were checked at 360×740 and 1200×800. No Android/iOS physical-device, camera, browser or web inference test is claimed. Android license acceptance remains the user's action; the iOS native library may require a physical device. No web target is provided.
+Verified locally: unit/controller/widget tests, native model load, real cat/dog inference, invalid-image rejection, debug/release macOS builds, and release-app UI interactions including file selection, cancellation and reset. Responsive widget layouts were checked at 360×740 and 1200×800. The final in-app credits addition passed local analysis and tests; its extra local release rebuild was interrupted when disk space fell below 300 MB. The earlier release build and UI checks passed, and CI builds the final commit separately. No Android/iOS physical-device, camera, browser or web inference test is claimed. Android license acceptance remains the user's action; the iOS native library may require a physical device. No web target is provided.
 
 Direct packages: **material_ui 1.11.1**, **tflite_flutter 0.12.1**, **image 4.13.1**, **image_picker 1.2.4**; **flutter_lints 6.0.0**. All direct packages are current stable compatible releases. SDK/upstream transitive constraints are documented in the [dependency inventory](docs/dependencies.md), rather than forced with overrides. Installed crapper, dryer and mutator do not support Dart; no scores from them are claimed.
 
