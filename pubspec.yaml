@@ -1,22 +1,25 @@
 name: teachable_ml
-description: A new Flutter project.
-version: 1.0.0+1
-
+description: Local cat and dog image classification with a Teachable Machine model.
+publish_to: none
+version: 2.0.0+2
 environment:
-  sdk: ">=2.1.0 <3.0.0"
-
+  sdk: ">=3.14.0 <4.0.0"
+  flutter: ">=3.50.0"
 dependencies:
   flutter:
     sdk: flutter
-  tflite: ^1.0.5
-  percent_indicator: ^2.1.1+1
-  image_picker: ^0.6.4
-
+  material_ui: ^1.11.1
+  tflite_flutter: ^0.12.1
+  image: ^4.13.1
+  image_picker: ^1.2.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - assets/model_unquant.tflite
+    - assets/labels.txt
