@@ -11,3 +11,8 @@
 - Updated platform scaffolding from the pinned SDK, preserved original Android/iOS application identifiers and existing icons. Added macOS read-only selected-file access and a build phase to embed/sign the package's native runtime.
 - Checked installed crapper, dryer and mutator help: none supports Dart. No CRAP, duplication or mutation score is claimed.
 - Generated a fresh AI conceptual cover, visibly labelled as illustration. Application screenshots are captured separately from the running app.
+- Native smoke test first found a relative-file lookup error in the test harness; moved licensed photos into bundled assets. Re-run passed native model loading, real cat/dog predictions, malformed-image rejection and post-disposal rejection. No accuracy benchmark was claimed.
+- Added bundled sample buttons and Android lost-picker-data recovery. Converted decoded channels to uint8 before normalization, including higher-bit-depth sources.
+- macOS debug build passed. Release build passed (57.3 MB). Release app visually inspected via native UI: both samples inferred, a cat file opened through the system picker, picker cancellation retained the previous result, and reset restored the empty state. Captured actual empty/cat/dog screens in `docs/images/`.
+- Static analysis passed with no issues; 9 unit/controller/widget tests passed. Validated domain outputs before any push.
+- Updated repository About in English and confirmed five topics: dart, flutter, image-classification, machine-learning, teachable-machine.

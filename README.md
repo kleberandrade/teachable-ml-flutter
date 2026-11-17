@@ -1,98 +1,67 @@
-# Flutter Image Classification
+# Teachable Lab — Cat or Dog?
 
-[![Language: Dart](https://img.shields.io/badge/Language-Dart-0175C2)](https://github.com/kleberandrade/teachable-ml-flutter/blob/master/pubspec.yaml)
-[![Framework: Flutter](https://img.shields.io/badge/Framework-Flutter-02569B)](https://github.com/kleberandrade/teachable-ml-flutter/blob/master/pubspec.yaml)
+[![Flutter CI](https://github.com/kleberandrade/teachable-ml-flutter/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/kleberandrade/teachable-ml-flutter/actions/workflows/ci.yml)
+[![Flutter 3.50.0](https://img.shields.io/badge/Flutter-3.50.0-02569B)](https://docs.flutter.dev/release/release-notes)
+[![Dart 3.14.0](https://img.shields.io/badge/Dart-3.14.0-0175C2)](https://dart.dev/)
+[![Code license MIT](https://img.shields.io/badge/Code-MIT-green)](LICENSE)
 
-Flutter classroom example of image classification using a Teachable Machine model.
+A Flutter classroom application by **Kleber de Oliveira Andrade** that runs the original Teachable Machine cat/dog model locally. Choose your own photo or try the two licensed samples. The responsive Portuguese interface explains both class scores, handles failures and lets you start again.
 
-## Getting started
+![Running macOS application showing a cat photo and both model scores](docs/images/app-cat.png)
 
-- Select a Flutter release whose bundled Dart SDK satisfies the manifest constraint, then run the commands below from the repository root.
+*Real macOS release-build screenshot, 2026-11-17. Cat photograph: Von.grzanka, CC BY-SA 3.0. Screenshot incorporating the photo: CC BY-SA 3.0; see [sample attribution](assets/samples/README.md). Displayed percentages are rounded model scores, not measured accuracy.*
+
+## Requirements and setup
+
+Use Flutter **3.50.0** stable (Dart **3.14.0**), pinned in `.flutter-version`. macOS is the validated platform: macOS 12+, Xcode command-line tools and CocoaPods 1.16.2. No account, API key, hosted model or network connection is needed during classification.
 
 ```sh
-flutter pub get
-flutter run
+git clone https://github.com/kleberandrade/teachable-ml-flutter.git
+cd teachable-ml-flutter
+flutter --version
+flutter pub get --enforce-lockfile
+flutter run -d macos
 ```
 
-- If the app depends on Firebase or another external service, configure your own service project using the dependencies and original notes; credentials are not supplied by this guide.
+Choose **Escolher imagem** for a file, **Testar gato** or **Testar cachorro** for bundled samples, and **Recomeçar** to clear the current result. Cancelling the file picker keeps the previous result. Cancelling an analysis invalidates its result; the already-running isolated job may finish in the background. The interface stays responsive.
 
-## Recorded requirements
+Images are limited to 12 MB and 24 megapixels. JPEG, PNG and WebP are recommended. EXIF orientation is applied before a centered square crop and resizing to 224×224. A preview shows the original aspect ratio; the model sees the square crop. Files are not uploaded or retained by this app.
 
-- Dart SDK constraint from [`pubspec.yaml`](https://github.com/kleberandrade/teachable-ml-flutter/blob/master/pubspec.yaml): `>=2.1.0 <3.0.0`.
+## How inference works
 
-## Repository map
+- `lib/domain/classification.dart`: pure parsing, shape/type validation, bounded decoding, preprocessing and score interpretation.
+- `lib/classifier.dart`: loads the bundled model, validates one input/output and runs each inference in a background isolate with its own native interpreter. Every job closes its interpreter, including failures.
+- `lib/controller.dart`: loading, ready, busy, selection cancellation, retry, reset, stale-result rejection and disposal.
+- `lib/main.dart`: responsive Material UI, live result announcements, semantic progress labels, file picker and sample controls. Android also recovers picker data after activity destruction; camera controls appear only on Android/iOS.
 
-- [lib](https://github.com/kleberandrade/teachable-ml-flutter/tree/master/lib)
-- [test](https://github.com/kleberandrade/teachable-ml-flutter/tree/master/test)
-- [android](https://github.com/kleberandrade/teachable-ml-flutter/tree/master/android)
-- [ios](https://github.com/kleberandrade/teachable-ml-flutter/tree/master/ios)
+Model input: **float32 `[1,224,224,3]`**, RGB `(channel / 127.5) - 1`. Output: **float32 `[1,2]`**, softmax scores mapped to `0 Gato`, `1 Cachorro`, then sorted for display. Non-finite/out-of-range scores, wrong output length and a sum outside 1±0.01 are rejected. Normalization follows the Teachable Machine MobileNet convention; the old helper's `[0,1]` normalization was removed. See [model contract and limitations](docs/model-card.md).
 
-## Validation status
+This is a closed two-class demonstration: a chair can receive a high cat/dog score. There is no unknown class, calibrated confidence, safety guarantee or verified dataset accuracy. Two successful sample predictions are smoke tests only.
 
-This update documents the tracked source and project metadata. It does not certify a successful build, device test or compatibility with a current toolchain. Follow any project-specific validation instructions in the original material.
+## Validate and build
 
-## License and attribution
+```sh
+dart format --output=none --set-exit-if-changed lib test integration_test
+flutter analyze
+flutter test --coverage
+flutter test integration_test/inference_test.dart -d macos
+flutter build macos --release
+```
 
-No standalone repository-wide license file was identified in this review. Preserve the original credits and any component-specific licenses; this documentation update grants no additional rights.
+The macOS build embeds and signs the native library from the locked tflite_flutter package through an Xcode build phase. The local build is not notarized or App Store signed. CI runs the same checks and uploads the app as an artifact; the badge links to its actual status.
 
----
+Verified locally: unit/controller/widget tests, native model load, real cat/dog inference, invalid-image rejection, debug/release macOS builds, and release-app UI interactions including file selection, cancellation and reset. Responsive widget layouts were checked at 360×740 and 1200×800. No Android/iOS physical-device, camera, browser or web inference test is claimed. Android license acceptance remains the user's action; the iOS native library may require a physical device. No web target is provided.
 
-## Original project material
+Direct packages: **material_ui 1.11.1**, **tflite_flutter 0.12.1**, **image 4.13.1**, **image_picker 1.2.4**; **flutter_lints 6.0.0**. All direct packages are current stable compatible releases. SDK/upstream transitive constraints are documented in the [dependency inventory](docs/dependencies.md), rather than forced with overrides. Installed crapper, dryer and mutator do not support Dart; no scores from them are claimed.
 
-# Classificação de Imagens
+## Lesson and migration
 
-Aplicativo para classificar imagens (gatos e cachorros) criado na disciplina de Programação Mobile, por Kleber de Oliveira Andrade.
+Read the [Portuguese Medium lesson](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-classificar-imagens-gato-e-cachorro-com-teachable-machine-be35c604c780), [editorial record](docs/medium-update.pt-BR.md) and [action log](docs/modernization-log.md).
 
-Tutorial de criação deste app [clique aqui](https://medium.com/@kleberandrade/criando-um-aplicativo-em-flutter-para-classificar-imagens-gato-e-cachorro-com-teachable-machine-be35c604c780).
+Version 2 replaces pre-null-safety helpers and the discontinued `tflite` API, removes `percent_indicator` in favor of native accessible progress bars, updates platform scaffolding and adds an executable macOS target. Original Android/iOS identifiers, model/labels and authorship are preserved. Historical README, architecture image links and original instructions are retained in [legacy-readme.md](docs/legacy-readme.md); they are not the current setup guide.
 
-## Arquitetura
+## Credits and licenses
 
-<p align="center">
-    <img src="https://miro.medium.com/max/1400/1*Zp_hJKpmWOaMNZEgcPkKOQ.png" width="740" />
-</p>
+Code: [MIT](LICENSE), Copyright **2020 Kleber de Oliveira Andrade**, preserved from the original README. Model and labels are unchanged original project assets; no separate model/training-data license or reproducible training archive was supplied. Do not assume the code license grants rights to the original training dataset. Teachable Machine and TensorFlow are credited to Google/their contributors.
 
-## Screenshots
-
-<p align="center">
-    <img src="https://cdn-images-1.medium.com/max/1200/1*tYVH6LoV6R68_UNNMdNnpg.jpeg" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/1200/1*wD1SiK6deupsFWL2dSktsA.jpeg" width="250"/>
-    <img src="https://cdn-images-1.medium.com/max/1200/1*AOk1Iu8XXfVVG0c1qfgHmw.jpeg" width="250"/>
-</p>
-
-## Como clonar e importar
-
-*   Faça um fork do projeto (precisa ter uma conta no github)
-*   Abra o terminal do Visual Studio Code
-*   Acesse a pasta onde deseja salvar o aplicativo e digite: git clone *link_do_projeto_no_seu_github* **teachable_ml**
-*   Clique em File -> Open e abra o projeto (pasta)
-*   Não se esqueça de abrir o arquivo *pubspec.yaml* e salvar (CTRL + S) o arquivo para que os plugins sejam baixados 
-
-## Desafio para aula
-
-*   [ ] Defina pelo menos três tipos de objetos que deseja reconhecer e prepare sua base de dados; Quanto mais imagens dos objetos melhor, mas cuidado com as outras informações das imagens (objetos, pessoas e etc);
-*   [ ] Crie um projeto novo no Teachable Machine, crie suas classes e faça upload das imagens; Treine, faça download do seu modelo e adicione ao projeto;
-*   [ ] Quando clicar para tirar fotos, eu gostaria de poder escolher entre câmera ou galeria de imagens. Estude mais a fundo o plugin [ImagePicker](https://pub.dev/packages/image_picker) ([exemplo de uso](https://heartbeat.fritz.ai/using-the-camera-gallery-in-flutter-apps-2f9e8e0e5899));
-*   [ ] Altere o tema do seu aplicativo - já fizemos isso várias vezes; Teste seu aplicativo para ver se ele reconhece os objetos;
-*   [ ] Escrever um relatório explicando de no máximo 2 páginas, explicando o resultado da sua classificação de imagens;
-
-## Licença
-
-    Copyright 2020 Kleber de Oliveira Andrade
-    
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-    
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-    
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+Bundled photographs and screenshots containing them retain [CC BY-SA 3.0 attribution](assets/samples/README.md). New [cover](docs/images/cover.png) is an AI-generated conceptual illustration, not a screenshot or training image. Dependency licenses remain their respective authors' licenses; Flutter's license registry is included by the build. See [asset/model notes](docs/model-card.md).
